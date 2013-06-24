@@ -116,15 +116,15 @@ public class JobsFilter {
             names = new TreeSet<String>();
         }
         
-        if (includePattern != null) {
-            for (Item item : view.getOwnerItemGroup().getItems()) {
-                String itemName = item.getName();
-                if (includePattern.matcher(itemName).matches()) {
-                    names.add(itemName);
-                }
+        for (Item item : view.getOwnerItemGroup().getItems()) {
+            String itemName = item.getName();
+            if (includePattern != null && includePattern.matcher(itemName).matches()) {
+                names.add(itemName);
+            } else { //Default - add all jobs
+                names.add(itemName);
             }
         }
-
+  
         Boolean localStatusFilter = this.statusFilter; // capture the value to isolate us from concurrent update
         List<TopLevelItem> items = new ArrayList<TopLevelItem>(names.size());
         for (String n : names) {
