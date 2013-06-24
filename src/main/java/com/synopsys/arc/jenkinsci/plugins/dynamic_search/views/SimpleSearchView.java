@@ -48,7 +48,11 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 /**
- *
+ * List View with dynamic filters.
+ * Class uses internal storage to pass parameters between pages.
+ * @todo Add support of URLs
+ * @todo Add "Save as view" button
+ * @fixme Add garbage collector
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
  */
 public class SimpleSearchView extends ListView {
@@ -78,13 +82,11 @@ public class SimpleSearchView extends ListView {
         // Handle filters from config
         List<TopLevelItem> res = super.getItems(); 
         
-        // 
+        // Handle user-specified filter
         if (hasConfiguredFilters()) {
             JobsFilter filters = contextMap.get(Hudson.SESSION_HASH);
             res = filters.doFilter(res, this);
         }
-        
-        // Handle filters from URL   
         return res;
     }
        

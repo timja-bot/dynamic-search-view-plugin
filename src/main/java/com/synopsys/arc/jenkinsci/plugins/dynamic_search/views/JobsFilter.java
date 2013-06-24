@@ -48,6 +48,9 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class JobsFilter {
         
+    /**
+     * Jobs filters
+     */
     private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> jobFilters;
 
     /**
@@ -75,6 +78,15 @@ public class JobsFilter {
         this.includeRegex = null;        
     }
     
+    /**
+     * Constructs filter from StaplerRequest.
+     * This constructor is just a modified copy of ListView's configure method.
+     * @param req Stapler Request
+     * @param parentView Parent View, which has created filter
+     * @throws hudson.model.Descriptor.FormException
+     * @throws IOException
+     * @throws ServletException 
+     */
     public JobsFilter(StaplerRequest req, View parentView) 
             throws Descriptor.FormException, IOException, ServletException {
         if (req.getParameter("useincluderegex") != null) {
@@ -113,20 +125,22 @@ public class JobsFilter {
             }
         }
 
-        Boolean statusFilter = this.statusFilter; // capture the value to isolate us from concurrent update
+        Boolean localStatusFilter = this.statusFilter; // capture the value to isolate us from concurrent update
         List<TopLevelItem> items = new ArrayList<TopLevelItem>(names.size());
         for (String n : names) {
             TopLevelItem item = view.getOwnerItemGroup().getItem(n);
             // Add if no status filter or filter matches enabled/disabled status:
-            if(item!=null && (statusFilter == null || !(item instanceof AbstractProject)
-                              || ((AbstractProject)item).isDisabled() ^ statusFilter))
+            if(item!=null && (localStatusFilter == null 
+                    || !(item instanceof AbstractProject)
+                    || ((AbstractProject)item).isDisabled() ^ localStatusFilter)) {
                 items.add(item);
+            }
         }
 
-        // check the filters
-        Iterable<ViewJobFilter> jobFilters = getJobFilters();
+        // Check the filters
+        Iterable<ViewJobFilter> localJobFilters = getJobFilters();
         List<TopLevelItem> allItems = new ArrayList<TopLevelItem>(view.getOwnerItemGroup().getItems());
-    	for (ViewJobFilter jobFilter: jobFilters) {
+    	for (ViewJobFilter jobFilter: localJobFilters) {
     		items = jobFilter.filter(items, allItems, view);
         }
         
