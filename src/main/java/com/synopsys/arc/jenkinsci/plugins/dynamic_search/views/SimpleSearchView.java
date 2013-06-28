@@ -64,17 +64,37 @@ public class SimpleSearchView extends ListView {
         super(name);
     } 
 
+    public static String getSessionId() {
+        return Hudson.SESSION_HASH;
+    }
+    
     @Override
     public Search getSearch() {
         return super.getSearch(); 
     }  
 
     public boolean hasConfiguredFilters() {
-        return contextMap!=null && contextMap.containsKey(Hudson.SESSION_HASH);
+        return contextMap!=null && contextMap.containsKey(getSessionId());
     }
     
     public JobsFilter getFilters() {
-        return hasConfiguredFilters() ? contextMap.get(Hudson.SESSION_HASH) : new JobsFilter(this);
+        return hasConfiguredFilters() ? contextMap.get(getSessionId()) : new JobsFilter(this);
+    }
+    
+    /**
+     * Cleans internal cache of JSON Objects.
+     * @todo Cleanup approach, replace for URL-based parameterization
+     * @return sessionId
+     */
+    public String cleanCache() {
+        String sessionId = getSessionId();
+        if (contextMap.containsKey(sessionId)) {
+            contextMap.remove(sessionId);
+        }
+        
+        //TODO: garbage collector 
+        
+        return sessionId;
     }
     
     @Override
@@ -84,7 +104,7 @@ public class SimpleSearchView extends ListView {
         
         // Handle user-specified filter
         if (hasConfiguredFilters()) {
-            JobsFilter filters = contextMap.get(Hudson.SESSION_HASH);
+            JobsFilter filters = contextMap.get(getSessionId());
             res = filters.doFilter(res, this);
         }
         return res;
@@ -102,7 +122,7 @@ public class SimpleSearchView extends ListView {
                 contextMap = new ConcurrentHashMap<String, JobsFilter>();
             }
         }
-        contextMap.put(Hudson.SESSION_HASH, filter);
+        contextMap.put(getSessionId(), filter);
         
         // Redirect to the current page in order to reload list with filters
         rsp.sendRedirect(".");

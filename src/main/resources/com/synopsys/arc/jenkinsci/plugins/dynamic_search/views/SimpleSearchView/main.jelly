@@ -1,9 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-    <!--<div>Filters: ${url}
-        <html></html>
-    </div> -->
-       
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">       
     <!--help="/help/view-config/includeregex.html"-->   
        
     <f:form method="post" name="config" action="searchSubmit">
@@ -38,7 +34,10 @@
       </f:section> -->
       <f:block>
         <f:submit value="${%Submit}" />
-      </f:block>
+      </f:block>        
     </f:form>
+    
     <st:include page="main.jelly" class="hudson.model.ListView"/>
+    <!--HACK: Clean cache--> 
+    <div>Session id: ${it.cleanCache()}</div>
 </j:jelly>
