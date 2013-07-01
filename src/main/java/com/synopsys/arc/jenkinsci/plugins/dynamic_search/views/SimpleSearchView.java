@@ -64,6 +64,10 @@ public class SimpleSearchView extends ListView {
         super(name);
     } 
 
+    /**
+     * Gets identifier of the current session.
+     * @return Unique id of the current session.
+     */
     public static String getSessionId() {
         return Hudson.SESSION_HASH;
     }
@@ -132,9 +136,10 @@ public class SimpleSearchView extends ListView {
     public static final class DescriptorImpl extends ViewDescriptor {
         @Override
         public String getDisplayName() {
-            return "SimpleSearchView";
-        }
-
+            return "Simple Search View";
+        }      
+        
+        
         /**
          * Checks if the include regular expression is valid.
          */
