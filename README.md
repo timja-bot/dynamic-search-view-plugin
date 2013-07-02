@@ -1,7 +1,7 @@
-dynamic-search-view-plugin
+Dynamic Search View Plugin
 ==========================
 
-Dynamic Search View for Jenkins
+Dynamic Search View for Jenkins CI
 
 Description
 --------
