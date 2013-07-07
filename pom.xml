@@ -7,7 +7,7 @@
     </parent>
 
     <groupId>com.synopsys.arc.jenkinsci</groupId>
-    <artifactId>dynamic-search</artifactId>
+    <artifactId>dynamic-search-view</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Dynamic Search View Plugin</name>
     <description>Provides View with dynamically configurable filters</description>
