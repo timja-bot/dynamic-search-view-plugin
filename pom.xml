@@ -12,6 +12,7 @@
     <name>Dynamic Search View Plugin</name>
     <description>Provides View with dynamically configurable filters</description>
     <packaging>hpi</packaging>
+    <url>https://wiki.jenkins-ci.org/display/JENKINS/Dynamic+Search+View+Plugin</url>
 
     <properties>
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
