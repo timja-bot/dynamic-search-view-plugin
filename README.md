@@ -1,7 +1,7 @@
 Dynamic Search View Plugin
 ==========================
 
-Dynamic Search View for Jenkins CI
+Dynamic Search View for Jenkins CI. More info: [plugin's page][3] on Jenkins CI Wiki.
 
 Description
 --------
@@ -17,3 +17,4 @@ License
 
 [1]: http://www.opensource.org/licenses/mit-license.php
 [2]: https://github.com/oleg-nenashev
+[3]: https://wiki.jenkins-ci.org/display/JENKINS/Dynamic+Search+View+Plugin
