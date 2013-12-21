@@ -49,7 +49,7 @@ import org.kohsuke.stapler.StaplerRequest;
 public class JobsFilter {
         
     /**
-     * Jobs filters
+     * Jobs filters.
      */
     private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> jobFilters;
 
@@ -83,9 +83,6 @@ public class JobsFilter {
      * This constructor is just a modified copy of ListView's configure method.
      * @param req Stapler Request
      * @param parentView Parent View, which has created filter
-     * @throws hudson.model.Descriptor.FormException
-     * @throws IOException
-     * @throws ServletException 
      */
     public JobsFilter(StaplerRequest req, View parentView) 
             throws Descriptor.FormException, IOException, ServletException {

@@ -96,8 +96,7 @@ public class SimpleSearchView extends ListView {
             contextMap.remove(sessionId);
         }
         
-        //TODO: garbage collector 
-        
+        //TODO: garbage collector       
         return sessionId;
     }
     
@@ -136,10 +135,9 @@ public class SimpleSearchView extends ListView {
     public static final class DescriptorImpl extends ViewDescriptor {
         @Override
         public String getDisplayName() {
-            return "Simple Search View";
+            return Messages.SimpleSearchView_displayName();
         }      
-        
-        
+               
         /**
          * Checks if the include regular expression is valid.
          */
@@ -156,11 +154,6 @@ public class SimpleSearchView extends ListView {
         }
     }
   
-    /**
-    public Iterable<ViewJobFilter> getUserJobFilters() {
-        return jobFilters;
-    } */
-
     public boolean hasUserJobFilterExtensions() {
         return !ViewJobFilter.all().isEmpty();
     }
