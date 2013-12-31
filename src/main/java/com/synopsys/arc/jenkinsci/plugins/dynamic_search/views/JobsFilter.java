@@ -51,12 +51,18 @@ public class JobsFilter {
     /**
      * Jobs filters.
      */
-    private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> jobFilters;
+    private final DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> jobFilters;
 
     /**
      * Include regex string.
      */
-    private String includeRegex;
+    private final String includeRegex;
+    
+    /**
+     * Filter by enabled/disabled status of jobs.
+     * Null for no filter, true for enabled-only, false for disabled-only.
+     */
+    private final Boolean statusFilter;
     
     /**
      * Compiled include pattern from the includeRegex string.
@@ -64,13 +70,7 @@ public class JobsFilter {
     private transient Pattern includePattern;
 
     /**
-     * Filter by enabled/disabled status of jobs.
-     * Null for no filter, true for enabled-only, false for disabled-only.
-     */
-    private Boolean statusFilter;
-    
-    /**
-     * Constructs empty filter.
+     * Constructs an empty filter.
      */
     public JobsFilter(View owner) {
         this.statusFilter = null;
@@ -79,12 +79,12 @@ public class JobsFilter {
     }
     
     /**
-     * Constructs filter from StaplerRequest.
+     * Constructs a filter from the StaplerRequest.
      * This constructor is just a modified copy of ListView's configure method.
      * @param req Stapler Request
      * @param parentView Parent View, which has created filter
      */
-    public JobsFilter(StaplerRequest req, View parentView) 
+    JobsFilter(StaplerRequest req, View parentView) 
             throws Descriptor.FormException, IOException, ServletException {
         if (req.getParameter("useincluderegex") != null) {
             includeRegex = Util.nullify(req.getParameter("_.includeRegex"));
@@ -97,9 +97,7 @@ public class JobsFilter {
             includePattern = null;
         }
   
-        if (jobFilters == null) {
-            jobFilters = new DescribableList<ViewJobFilter,Descriptor<ViewJobFilter>>(parentView);
-        }
+        jobFilters = new DescribableList<ViewJobFilter,Descriptor<ViewJobFilter>>(parentView);
         jobFilters.rebuildHetero(req, req.getSubmittedForm(), ViewJobFilter.all(), "jobFilters");
 
         String filter = Util.fixEmpty(req.getParameter("statusFilter"));

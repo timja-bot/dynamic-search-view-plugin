@@ -23,6 +23,8 @@
  */
 package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
+import com.synopsys.arc.jenkinsci.plugins.dynamic_search.context.UserContext;
+import com.synopsys.arc.jenkinsci.plugins.dynamic_search.context.UserContextCache;
 import hudson.Extension;
 import hudson.Util;
 import hudson.model.Descriptor;
@@ -37,8 +39,6 @@ import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletException;
@@ -57,7 +57,7 @@ import org.kohsuke.stapler.StaplerResponse;
  */
 public class SimpleSearchView extends ListView {
 
-    transient Map<String, JobsFilter> contextMap;
+    transient UserContextCache contextMap;
     
     @DataBoundConstructor
     public SimpleSearchView(String name) {
@@ -82,18 +82,20 @@ public class SimpleSearchView extends ListView {
     }
     
     public JobsFilter getFilters() {
-        return hasConfiguredFilters() ? contextMap.get(getSessionId()) : new JobsFilter(this);
+        return hasConfiguredFilters() 
+                ? contextMap.get(getSessionId()).getFiltersConfig()
+                : new JobsFilter(this);
     }
     
     /**
-     * Cleans internal cache of JSON Objects.
+     * Cleans internal cache of JSON Objects for the session.
      * @todo Cleanup approach, replace for URL-based parameterization
      * @return sessionId
      */
     public String cleanCache() {
-        String sessionId = getSessionId();
-        if (contextMap.containsKey(sessionId)) {
-            contextMap.remove(sessionId);
+        final String sessionId = getSessionId();
+        if (hasConfiguredFilters()) {
+            contextMap.flush(sessionId);
         }
         
         //TODO: garbage collector       
@@ -107,7 +109,7 @@ public class SimpleSearchView extends ListView {
         
         // Handle user-specified filter
         if (hasConfiguredFilters()) {
-            JobsFilter filters = contextMap.get(getSessionId());
+            JobsFilter filters = contextMap.get(getSessionId()).getFiltersConfig();
             res = filters.doFilter(res, this);
         }
         return res;
@@ -122,10 +124,10 @@ public class SimpleSearchView extends ListView {
         // Put Context to the map
         if (contextMap==null) {
             synchronized(this) {
-                contextMap = new ConcurrentHashMap<String, JobsFilter>();
+                contextMap = new UserContextCache();
             }
         }
-        contextMap.put(getSessionId(), filter);
+        contextMap.put(getSessionId(), new UserContext(filter));
         
         // Redirect to the current page in order to reload list with filters
         rsp.sendRedirect(".");
