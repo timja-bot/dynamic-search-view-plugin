@@ -44,6 +44,7 @@ import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletException;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -63,13 +64,13 @@ public class SimpleSearchView extends ListView {
     public SimpleSearchView(String name) {
         super(name);
     } 
-
+       
     /**
      * Gets identifier of the current session.
      * @return Unique id of the current session.
      */
     public static String getSessionId() {
-        return Hudson.SESSION_HASH;
+        return Stapler.getCurrentRequest().getSession().getId();     
     }
     
     @Override
