@@ -33,6 +33,7 @@ import hudson.util.DescribableList;
 import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -41,95 +42,95 @@ import javax.servlet.ServletException;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
- * Implements Jobs filter for SearchView.
+ * Implements a jobs filter for {@link SimpleSearchView}.
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
  * @see SimpleSearchView
  * @since 0.1
  */
 public class JobsFilter {
-        
+
     /**
      * Jobs filters.
      */
     private final DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> jobFilters;
-
     /**
      * Include regex string.
      */
     private final String includeRegex;
-    
     /**
-     * Filter by enabled/disabled status of jobs.
-     * Null for no filter, true for enabled-only, false for disabled-only.
+     * Filter by enabled/disabled status of jobs. Null for no filter, true for
+     * enabled-only, false for disabled-only.
      */
     private final Boolean statusFilter;
-    
     /**
      * Compiled include pattern from the includeRegex string.
      */
     private transient Pattern includePattern;
 
     /**
-     * Constructs an empty filter.
+     * Constructs a filter using specified default values.
      */
-    public JobsFilter(View owner) {
-        this.statusFilter = null;
-        this.jobFilters = new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(owner);
-        this.includeRegex = null;        
+    JobsFilter(View owner, Collection<? extends ViewJobFilter> jobFilters, String includeRegex, Boolean statusFilter) {
+        this.jobFilters = (jobFilters != null)
+                ? new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(owner, jobFilters)
+                : new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(owner);
+        this.includeRegex = includeRegex;
+        this.statusFilter = statusFilter;
     }
-    
+
     /**
-     * Constructs a filter from the StaplerRequest.
-     * This constructor is just a modified copy of ListView's configure method.
+     * Constructs a filter from the StaplerRequest. This constructor is just a
+     * modified copy of ListView's configure method.
+     *
      * @param req Stapler Request
      * @param parentView Parent View, which has created filter
      */
-    JobsFilter(StaplerRequest req, View parentView) 
+    JobsFilter(StaplerRequest req, View parentView)
             throws Descriptor.FormException, IOException, ServletException {
         if (req.getParameter("useincluderegex") != null) {
             includeRegex = Util.nullify(req.getParameter("_.includeRegex"));
-            if (includeRegex == null)
+            if (includeRegex == null) {
                 includePattern = null;
-            else
+            } else {
                 includePattern = Pattern.compile(includeRegex);
+            }
         } else {
             includeRegex = null;
             includePattern = null;
         }
-  
-        jobFilters = new DescribableList<ViewJobFilter,Descriptor<ViewJobFilter>>(parentView);
+
+        jobFilters = new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(parentView);
         jobFilters.rebuildHetero(req, req.getSubmittedForm(), ViewJobFilter.all(), "jobFilters");
 
         String filter = Util.fixEmpty(req.getParameter("statusFilter"));
         statusFilter = filter != null ? "1".equals(filter) : null;
     }
-    
+
     public List<TopLevelItem> doFilter(List<TopLevelItem> input, View view) {
         SortedSet<String> names;
 
         synchronized (this) {
             names = new TreeSet<String>();
         }
-        
+
         for (Item item : view.getOwnerItemGroup().getItems()) {
             String itemName = item.getName();
-            
+
             if (includePattern == null) {
-               names.add(itemName); 
-            }
-            else if (includePattern.matcher(itemName).matches()) {
                 names.add(itemName);
-            } 
+            } else if (includePattern.matcher(itemName).matches()) {
+                names.add(itemName);
+            }
         }
-  
+
         Boolean localStatusFilter = this.statusFilter; // capture the value to isolate us from concurrent update
         List<TopLevelItem> items = new ArrayList<TopLevelItem>(names.size());
         for (String n : names) {
             TopLevelItem item = view.getOwnerItemGroup().getItem(n);
             // Add if no status filter or filter matches enabled/disabled status:
-            if(item!=null && (localStatusFilter == null 
+            if (item != null && (localStatusFilter == null
                     || !(item instanceof AbstractProject)
-                    || ((AbstractProject)item).isDisabled() ^ localStatusFilter)) {
+                    || ((AbstractProject) item).isDisabled() ^ localStatusFilter)) {
                 items.add(item);
             }
         }
@@ -137,15 +138,15 @@ public class JobsFilter {
         // Check the filters
         Iterable<ViewJobFilter> localJobFilters = getJobFilters();
         List<TopLevelItem> allItems = new ArrayList<TopLevelItem>(view.getOwnerItemGroup().getItems());
-    	for (ViewJobFilter jobFilter: localJobFilters) {
-    		items = jobFilter.filter(items, allItems, view);
+        for (ViewJobFilter jobFilter : localJobFilters) {
+            items = jobFilter.filter(items, allItems, view);
         }
-        
+
         return items;
     }
-    
+
     public DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> getJobFilters() {
-    	return jobFilters;
+        return jobFilters;
     }
 
     public Pattern getIncludePattern() {
@@ -160,4 +161,3 @@ public class JobsFilter {
         return statusFilter;
     }
 }
-    

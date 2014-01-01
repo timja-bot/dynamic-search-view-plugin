@@ -34,6 +34,7 @@ import hudson.model.TopLevelItem;
 import hudson.model.View;
 import hudson.model.ViewDescriptor;
 import hudson.search.Search;
+import hudson.util.DescribableList;
 import hudson.util.FormValidation;
 import hudson.views.ViewJobFilter;
 import java.io.IOException;
@@ -60,11 +61,34 @@ public class SimpleSearchView extends ListView {
 
     transient UserContextCache contextMap;
     
+    private String defaultIncludeRegex;
+    private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> defaultJobFilters;
+
     @DataBoundConstructor
     public SimpleSearchView(String name) {
         super(name);
     } 
-       
+
+    public String getDefaultIncludeRegex() {
+        return defaultIncludeRegex;
+    }
+
+    public DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> getDefaultJobFilters() {
+        return defaultJobFilters;
+    }
+
+    @Override
+    protected void submit(StaplerRequest req) throws ServletException, Descriptor.FormException, IOException {
+        super.submit(req); 
+        
+        // Handle default UI settings
+        if (defaultJobFilters == null) {
+            defaultJobFilters = new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(this);
+        }
+        defaultJobFilters.rebuildHetero(req, req.getSubmittedForm(), ViewJobFilter.all(), "defaultJobFilters");
+        defaultIncludeRegex = hudson.Util.fixEmpty(req.getParameter("defaultIncludeRegex").toString());
+    }
+         
     /**
      * Gets identifier of the current session.
      * @return Unique id of the current session.
@@ -85,7 +109,9 @@ public class SimpleSearchView extends ListView {
     public JobsFilter getFilters() {
         return hasConfiguredFilters() 
                 ? contextMap.get(getSessionId()).getFiltersConfig()
-                : new JobsFilter(this);
+                : new JobsFilter(this, 
+                    defaultJobFilters.getAll(ViewJobFilter.class), 
+                    defaultIncludeRegex, null);
     }
 
     /**
@@ -157,7 +183,12 @@ public class SimpleSearchView extends ListView {
         public String getDisplayName() {
             return Messages.SimpleSearchView_displayName();
         }      
-               
+        
+        public FormValidation doCheckDefaultIncludeRegex ( @QueryParameter String value ) 
+                throws IOException, ServletException, InterruptedException  {
+            return doCheckIncludeRegex(value);
+        }
+        
         /**
          * Checks if the include regular expression is valid.
          */
@@ -171,7 +202,7 @@ public class SimpleSearchView extends ListView {
                 }
             }
             return FormValidation.ok();
-        }
+        }     
     }
   
     public boolean hasUserJobFilterExtensions() {
