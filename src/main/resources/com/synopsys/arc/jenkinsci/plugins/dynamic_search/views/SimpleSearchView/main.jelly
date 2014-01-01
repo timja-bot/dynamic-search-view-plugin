@@ -43,6 +43,12 @@
         <f:submit value="${%Submit}" />
       </f:block>        
     </f:form>
+    <f:form method="post" name="config" action="resetDefaultSearchOptions">
+       <f:block>
+         <f:submit value="${%Reset Defaults}" />
+      </f:block>  
+    </f:form>
+    
     
     <st:include page="main.jelly" class="hudson.model.ListView"/>
     <!--HACK: Clean cache--> 

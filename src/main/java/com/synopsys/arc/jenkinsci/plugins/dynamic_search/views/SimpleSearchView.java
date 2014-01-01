@@ -109,19 +109,26 @@ public class SimpleSearchView extends ListView {
     public JobsFilter getFilters() {
         return hasConfiguredFilters() 
                 ? contextMap.get(getSessionId()).getFiltersConfig()
-                : new JobsFilter(this, 
+                : getDefaultFilters();
+    }
+
+    /**
+     * Gets default search options for UI. 
+     * @since 0.2
+     */
+    public JobsFilter getDefaultFilters() {
+        return new JobsFilter(this, 
                     defaultJobFilters.getAll(ViewJobFilter.class), 
                     defaultIncludeRegex, null);
     }
-
+    
     /**
      * An override for future versions.
      */
     public boolean isAutomaticRefreshEnabled() {
         return false;
     }
-    
-    
+       
     /**
      * Checks that the auto-refresh is enabled for the page.
      */
@@ -159,12 +166,20 @@ public class SimpleSearchView extends ListView {
         return res;
     }
        
-    public void doSearchSubmit(StaplerRequest req, StaplerResponse rsp) throws IOException, UnsupportedEncodingException, ServletException, Descriptor.FormException {
+    public void doSearchSubmit(StaplerRequest req, StaplerResponse rsp) 
+            throws IOException, UnsupportedEncodingException, ServletException, 
+            Descriptor.FormException {
         Hudson.getInstance().checkPermission(View.READ);
          
-        // Get filters
+        // Get filters and write them to the cache 
         JobsFilter filter = new JobsFilter(req, this);
+        updateSearchCache(filter);
         
+        // Redirect to the current page in order to reload list with filters
+        rsp.sendRedirect(".");
+     }
+    
+    public void updateSearchCache(JobsFilter filter) {
         // Put Context to the map
         if (contextMap==null) {
             synchronized(this) {
@@ -172,10 +187,18 @@ public class SimpleSearchView extends ListView {
             }
         }
         contextMap.put(getSessionId(), new UserContext(filter));
-        
-        // Redirect to the current page in order to reload list with filters
+    }
+    
+    /**
+     * Resets default values of the session.
+     * @since 0.2
+     */
+    public void doResetDefaultSearchOptions(StaplerRequest req, StaplerResponse rsp) 
+            throws IOException {
+        Hudson.getInstance().checkPermission(View.READ);
+        updateSearchCache(getDefaultFilters());
         rsp.sendRedirect(".");
-      }
+    } 
     
     @Extension
     public static final class DescriptorImpl extends ViewDescriptor {
