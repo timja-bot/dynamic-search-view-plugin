@@ -46,7 +46,7 @@ public class UserContextCache {
     public void flush(String sessionId) {
         if (contextMap.containsKey(sessionId)) {
             contextMap.remove(sessionId);
-        }
+        }      
     }
     
     public void put (String sessionId, UserContext context) {

@@ -1,7 +1,14 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">       
     <!--help="/help/view-config/includeregex.html"-->   
-       
+    
+    <!--Explicitly disable an automatic refresh
+    <j:set var="_" value="${it.disableAutoRefresh()}"/>-->
+    <j:if test="${it.autoRefreshActive}">
+        <a style="color:red"><b>${%Warning}!</b></a> 
+        ${%autoRefreshWarning}
+    </j:if>
+ 
     <f:form method="post" name="config" action="searchSubmit">
       <f:optionalBlock name="useincluderegex" title="${%Use a regular expression to include jobs into the view}"
                    checked="${it.filters.includeRegex != null}" >

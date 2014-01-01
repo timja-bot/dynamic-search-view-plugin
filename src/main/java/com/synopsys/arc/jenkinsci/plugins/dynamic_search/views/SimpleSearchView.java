@@ -70,7 +70,7 @@ public class SimpleSearchView extends ListView {
      * @return Unique id of the current session.
      */
     public static String getSessionId() {
-        return Stapler.getCurrentRequest().getSession().getId();     
+        return Stapler.getCurrentRequest().getSession().getId(); 
     }
     
     @Override
@@ -86,6 +86,23 @@ public class SimpleSearchView extends ListView {
         return hasConfiguredFilters() 
                 ? contextMap.get(getSessionId()).getFiltersConfig()
                 : new JobsFilter(this);
+    }
+
+    /**
+     * An override for future versions.
+     */
+    public boolean isAutomaticRefreshEnabled() {
+        return false;
+    }
+    
+    
+    /**
+     * Checks that the auto-refresh is enabled for the page.
+     */
+    public boolean isAutoRefreshActive() {
+        return true;
+        //TODO: implement something cool
+       // Stapler.getCurrentResponse().get
     }
     
     /**
