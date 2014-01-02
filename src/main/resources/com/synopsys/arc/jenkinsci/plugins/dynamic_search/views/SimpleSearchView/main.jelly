@@ -9,16 +9,17 @@
         ${%autoRefreshWarning}
     </j:if> 
  
-    <div style="border:1px solid #999;margin:2px">
+    <div style="border:1px solid #999">
         <f:form method="post" name="config" action="searchSubmit">
             <f:block>
                 <table>
                     <f:section title="${%Search options}">     
-                        <f:optionalBlock name="useincluderegex" title="${%Use a regular expression to include jobs into the view}"
+                        <f:optionalBlock name="useIncludeRegex" title="${%useIncludeRegex.title}"
                                  checked="${it.filters.includeRegex != null}" >
-                            <f:entry title="${%Regular expression}" field="includeRegex">
+                            <f:entry title="${%Regular expression}" field="includeRegex"   
+                                     help="${rootURL}/plugin/dynamic-search-view/help/help-includeRegex.html">
                                 <f:textbox value="${it.filters.includeRegex}"/>
-                            </f:entry>
+                             </f:entry>
                         </f:optionalBlock>
 
                         <j:if test="${it.hasJobFilterExtensions()}">
