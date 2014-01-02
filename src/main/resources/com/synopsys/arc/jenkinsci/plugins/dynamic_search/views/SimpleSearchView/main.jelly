@@ -9,30 +9,35 @@
         ${%autoRefreshWarning}
     </j:if> 
  
-    <div style="border:1px solid black">
+    <div style="border:1px solid #999;margin:2px">
         <f:form method="post" name="config" action="searchSubmit">
-            <f:section title="${%Search options}">     
-                <f:optionalBlock name="useincluderegex" title="${%Use a regular expression to include jobs into the view}"
-                         checked="${it.filters.includeRegex != null}" >
-                    <f:entry title="${%Regular expression}" field="includeRegex">
-                        <f:textbox value="${it.filters.includeRegex}"/>
-                    </f:entry>
-                </f:optionalBlock>
+            <f:block>
+                <table>
+                    <f:section title="${%Search options}">     
+                        <f:optionalBlock name="useincluderegex" title="${%Use a regular expression to include jobs into the view}"
+                                 checked="${it.filters.includeRegex != null}" >
+                            <f:entry title="${%Regular expression}" field="includeRegex">
+                                <f:textbox value="${it.filters.includeRegex}"/>
+                            </f:entry>
+                        </f:optionalBlock>
 
-                <j:if test="${it.hasJobFilterExtensions()}">
-                    <j:invokeStatic var="allJobFilters" className="hudson.views.ViewJobFilter" method="all"/>
-                    <f:block>
-                        <f:hetero-list name="jobFilters" hasHeader="true"
-                       descriptors="${allJobFilters}"
-                       items="${it.filters.getJobFilters()}"
-                       addCaption="${%Add Job Filter}" />
-                    </f:block>
-                </j:if>
-            </f:section>
-
+                        <j:if test="${it.hasJobFilterExtensions()}">
+                            <j:invokeStatic var="allJobFilters" className="hudson.views.ViewJobFilter" method="all"/>
+                            <f:block>
+                                <f:hetero-list name="jobFilters" hasHeader="true"
+                                       descriptors="${allJobFilters}"
+                                       items="${it.filters.getJobFilters()}"
+                                       addCaption="${%Add Job Filter}" />
+                            </f:block>
+                        </j:if>
+                    </f:section>
+                </table>
+            </f:block>
             <!--TODO: Add support of column modifiers-->
-            <f:submit name="runSearchButton" value="${%Search}" />
-            <f:submit name="resetDefaultsButton" value="${%Reset Defaults}" />
+            <f:block>
+                <f:submit name="runSearchButton" value="${%Search}" />
+                <f:submit name="resetDefaultsButton" value="${%Reset Defaults}" />
+            </f:block>
         </f:form>
     </div>
      
