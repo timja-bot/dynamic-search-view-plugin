@@ -8,7 +8,7 @@
 
     <groupId>com.synopsys.arc.jenkinsci</groupId>
     <artifactId>dynamic-search-view</artifactId>
-    <version>0.2</version>
+    <version>0.2-SNAPSHOT</version>
     <name>Dynamic Search View Plugin</name>
     <description>Provides a view with dynamically configurable filters</description>
     <packaging>hpi</packaging>
@@ -47,8 +47,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:ssh://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/jenkinsci/${project.artifactId}-plugin.git</developerConnection>
+        <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
     </scm>
     
