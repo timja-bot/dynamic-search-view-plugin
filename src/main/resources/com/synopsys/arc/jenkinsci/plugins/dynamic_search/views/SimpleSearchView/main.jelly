@@ -2,15 +2,16 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">       
     <!--help="/help/view-config/includeregex.html"-->   
     
-    <!--Explicitly disable an automatic refresh
-    <j:set var="_" value="${it.disableAutoRefresh()}"/>-->
+    <!--Explicitly disable an automatic refresh-->
+    <!--
     <j:if test="${it.autoRefreshActive}">
         <a style="color:red"><b>${%Warning}!</b></a> 
         ${%autoRefreshWarning}
-    </j:if>
+    </j:if> -->
  
     <f:form method="post" name="config" action="searchSubmit">
-      <f:optionalBlock name="useincluderegex" title="${%Use a regular expression to include jobs into the view}"
+    <f:section title="${%Search options}">     
+        <f:optionalBlock name="useincluderegex" title="${%Use a regular expression to include jobs into the view}"
                    checked="${it.filters.includeRegex != null}" >
         <f:entry title="${%Regular expression}" field="includeRegex">
           <f:textbox value="${it.filters.includeRegex}"/>
@@ -26,6 +27,7 @@
           addCaption="${%Add Job Filter}" />
      </f:block>
     </j:if>
+    </f:section>
 
 <!--TODO: Add support of column modifiers-->
 <!--      <f:section title="${%Columns}">
@@ -39,15 +41,16 @@
                          deleteCaption="${%Remove column}"/>
         </f:block>
       </f:section> -->
-      <f:block>
-        <f:submit value="${%Submit}" />
-      </f:block>        
+      <f:bottomButtonBar>
+        <f:submit name="runSearchButton" value="${%Search}" />
+        <f:submit name="resetDefaultsButton" value="${%Reset Defaults}" />
+      </f:bottomButtonBar>    
     </f:form>
-    <f:form method="post" name="config" action="resetDefaultSearchOptions">
+    <!--<f:form method="post" name="config" action="resetDefaultSearchOptions">
        <f:block>
          <f:submit value="${%Reset Defaults}" />
       </f:block>  
-    </f:form>
+    </f:form>-->
     
     
     <st:include page="main.jelly" class="hudson.model.ListView"/>

@@ -40,6 +40,7 @@ import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletException;
@@ -170,13 +171,21 @@ public class SimpleSearchView extends ListView {
             throws IOException, UnsupportedEncodingException, ServletException, 
             Descriptor.FormException {
         Hudson.getInstance().checkPermission(View.READ);
-         
-        // Get filters and write them to the cache 
-        JobsFilter filter = new JobsFilter(req, this);
-        updateSearchCache(filter);
+        SearchAction action = SearchAction.fromRequest(req);
         
-        // Redirect to the current page in order to reload list with filters
-        rsp.sendRedirect(".");
+        switch (action) {
+            case runSearchButton:
+                JobsFilter filter = new JobsFilter(req, this);
+                updateSearchCache(filter);
+                rsp.sendRedirect(".");
+                break;
+            case resetDefaultsButton:
+                updateSearchCache(getDefaultFilters());
+                rsp.sendRedirect(".");
+                break;
+            default:
+                throw new IOException("Action "+action+" is not supported");
+        } 
      }
     
     public void updateSearchCache(JobsFilter filter) {
@@ -188,18 +197,7 @@ public class SimpleSearchView extends ListView {
         }
         contextMap.put(getSessionId(), new UserContext(filter));
     }
-    
-    /**
-     * Resets default values of the session.
-     * @since 0.2
-     */
-    public void doResetDefaultSearchOptions(StaplerRequest req, StaplerResponse rsp) 
-            throws IOException {
-        Hudson.getInstance().checkPermission(View.READ);
-        updateSearchCache(getDefaultFilters());
-        rsp.sendRedirect(".");
-    } 
-    
+      
     @Extension
     public static final class DescriptorImpl extends ViewDescriptor {
         @Override
@@ -230,5 +228,20 @@ public class SimpleSearchView extends ListView {
   
     public boolean hasUserJobFilterExtensions() {
         return !ViewJobFilter.all().isEmpty();
+    }
+    
+    enum SearchAction {
+        runSearchButton,
+        resetDefaultsButton;
+        
+        static SearchAction fromRequest(StaplerRequest req) throws IOException {
+            Map map = req.getParameterMap();
+            for (SearchAction val : SearchAction.values()) {
+                if (map.containsKey(val.toString())) {
+                    return val;
+                }
+            }
+            throw new IOException("Cannot find an action in the reqest");
+        }
     }
 }
