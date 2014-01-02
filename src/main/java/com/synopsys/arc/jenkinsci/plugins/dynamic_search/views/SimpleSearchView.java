@@ -23,8 +23,6 @@
  */
 package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
-import com.synopsys.arc.jenkinsci.plugins.dynamic_search.context.UserContext;
-import com.synopsys.arc.jenkinsci.plugins.dynamic_search.context.UserContextCache;
 import hudson.Extension;
 import hudson.Util;
 import hudson.model.Descriptor;
@@ -197,6 +195,7 @@ public class SimpleSearchView extends ListView {
       
     @Extension
     public static final class DescriptorImpl extends ViewDescriptor {
+        
         @Override
         public String getDisplayName() {
             return Messages.SimpleSearchView_displayName();
@@ -227,7 +226,11 @@ public class SimpleSearchView extends ListView {
         return !ViewJobFilter.all().isEmpty();
     }
     
-    enum SearchAction {
+    /**
+     * Defines actions inside Search panel.
+     * @since 0.2
+     */
+    enum SearchAction {   
         runSearchButton,
         resetDefaultsButton;
         

@@ -21,18 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.synopsys.arc.jenkinsci.plugins.dynamic_search.context;
+package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
 import static com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSearchView.getSessionId;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
+ * Stores search sessions for {@link SimpleSearchView}.
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
  * @since 0.2
  */
-public class UserContextCache {
+class UserContextCache {
     Map<String, UserContext> contextMap = new HashMap<String, UserContext>();
     
     public boolean containsKey(String sessionId) {

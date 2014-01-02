@@ -6,15 +6,14 @@
         <f:entry title="${%Regular expression}">
             <f:textbox name="defaultIncludeRegex" field="defaultIncludeRegex" />
         </f:entry>
-        ${it}
         <j:if test="${it.hasJobFilterExtensions()}">
-     <j:invokeStatic var="allJobFilters" className="hudson.views.ViewJobFilter" method="all"/>
-     <f:block>
-        <f:hetero-list name="defaultJobFilters" hasHeader="true"
-          descriptors="${allJobFilters}"
-          items="${it.defaultJobFilters}"
-          addCaption="${%Add Job Filter}" />
-     </f:block>
-    </j:if>
+            <j:invokeStatic var="allJobFilters" className="hudson.views.ViewJobFilter" method="all"/>
+            <f:block>
+                <f:hetero-list name="defaultJobFilters" hasHeader="true"
+                       descriptors="${allJobFilters}"
+                       items="${it.defaultJobFilters}"
+                       addCaption="${%Add Job Filter}" />
+            </f:block>
+        </j:if>
     </f:section>
 </j:jelly>

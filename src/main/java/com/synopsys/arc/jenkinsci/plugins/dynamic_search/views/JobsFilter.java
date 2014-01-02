@@ -43,7 +43,7 @@ import javax.servlet.ServletException;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
- * Implements a jobs filter for {@link SimpleSearchView}.
+ * Implements a job filter for {@link SimpleSearchView}.
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
  * @see SimpleSearchView
  * @since 0.1
@@ -105,22 +105,23 @@ public class JobsFilter {
 
 
     public List<TopLevelItem> doFilter(List<TopLevelItem> input, View view) {
-        SortedSet<String> names;
-
+        
+        // Dump a names map for projects mathing the regex
+        SortedSet<String> names;     
         synchronized (this) {
             names = new TreeSet<String>();
-        }
+            for (Item item : view.getOwnerItemGroup().getItems()) {
+                String itemName = item.getName();
 
-        for (Item item : view.getOwnerItemGroup().getItems()) {
-            String itemName = item.getName();
-
-            if (includePattern == null) {
-                names.add(itemName);
-            } else if (includePattern.matcher(itemName).matches()) {
-                names.add(itemName);
+                if (includePattern == null) {
+                    names.add(itemName);
+                } else if (includePattern.matcher(itemName).matches()) {
+                    names.add(itemName);
+                }
             }
         }
 
+        // Filter by status
         Boolean localStatusFilter = this.statusFilter; // capture the value to isolate us from concurrent update
         List<TopLevelItem> items = new ArrayList<TopLevelItem>(names.size());
         for (String n : names) {
@@ -133,7 +134,7 @@ public class JobsFilter {
             }
         }
 
-        // Check the filters
+        // Check other filter extensions
         Iterable<ViewJobFilter> localJobFilters = getJobFilters();
         List<TopLevelItem> allItems = new ArrayList<TopLevelItem>(view.getOwnerItemGroup().getItems());
         for (ViewJobFilter jobFilter : localJobFilters) {

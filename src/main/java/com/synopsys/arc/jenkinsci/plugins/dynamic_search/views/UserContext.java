@@ -21,19 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.synopsys.arc.jenkinsci.plugins.dynamic_search.context;
-
-import com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.JobsFilter;
+package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
 /**
  * Stores a context of user selections.
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
  * @since 0.2
  */
-public class UserContext {
+class UserContext {
     
     private final JobsFilter filtersConfig;
-
+    
     public UserContext(JobsFilter filtersConfig) {
         this.filtersConfig = filtersConfig;
     }
