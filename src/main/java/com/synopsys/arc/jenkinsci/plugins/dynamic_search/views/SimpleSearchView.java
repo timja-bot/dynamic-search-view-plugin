@@ -159,12 +159,9 @@ public class SimpleSearchView extends ListView {
         // Handle filters from config
         List<TopLevelItem> res = super.getItems(); 
         
-        // Handle user-specified filter
-        if (hasConfiguredFilters()) {
-            JobsFilter filters = contextMap.get(getSessionId()).getFiltersConfig();
-            res = filters.doFilter(res, this);
-        }
-        return res;
+        // Handle user-specified filters
+        JobsFilter filters = getFilters();
+        return filters.doFilter(res, this);
     }
        
     public void doSearchSubmit(StaplerRequest req, StaplerResponse rsp) 

@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletException;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -65,17 +66,19 @@ public class JobsFilter {
     /**
      * Compiled include pattern from the includeRegex string.
      */
-    private transient Pattern includePattern;
+    private final transient Pattern includePattern;
 
     /**
      * Constructs a filter using specified default values.
      */
-    JobsFilter(View owner, Collection<? extends ViewJobFilter> jobFilters, String includeRegex, Boolean statusFilter) {
+    JobsFilter(View owner, Collection<? extends ViewJobFilter> jobFilters, String includeRegex, Boolean statusFilter) 
+            throws PatternSyntaxException {
         this.jobFilters = (jobFilters != null)
                 ? new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(owner, jobFilters)
                 : new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(owner);
         this.includeRegex = includeRegex;
         this.statusFilter = statusFilter;
+        this.includePattern = (includeRegex != null) ? Pattern.compile(includeRegex) : null;
     }
 
     /**
@@ -87,24 +90,19 @@ public class JobsFilter {
      */
     JobsFilter(StaplerRequest req, View parentView)
             throws Descriptor.FormException, IOException, ServletException {
-        if (req.getParameter("useincluderegex") != null) {
-            includeRegex = Util.nullify(req.getParameter("_.includeRegex"));
-            if (includeRegex == null) {
-                includePattern = null;
-            } else {
-                includePattern = Pattern.compile(includeRegex);
-            }
-        } else {
-            includeRegex = null;
-            includePattern = null;
-        }
-
+        
         jobFilters = new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(parentView);
         jobFilters.rebuildHetero(req, req.getSubmittedForm(), ViewJobFilter.all(), "jobFilters");
-
+        
+        includeRegex = (req.getParameter("useincluderegex") != null) 
+                ? Util.nullify(req.getParameter("_.includeRegex")) : null;
+        this.includePattern = (includeRegex != null) 
+                ? Pattern.compile(includeRegex) : null;
+         
         String filter = Util.fixEmpty(req.getParameter("statusFilter"));
         statusFilter = filter != null ? "1".equals(filter) : null;
     }
+
 
     public List<TopLevelItem> doFilter(List<TopLevelItem> input, View view) {
         SortedSet<String> names;
