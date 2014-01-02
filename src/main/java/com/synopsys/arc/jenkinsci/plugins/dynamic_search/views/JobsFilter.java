@@ -94,8 +94,7 @@ public class JobsFilter {
         jobFilters = new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(parentView);
         jobFilters.rebuildHetero(req, req.getSubmittedForm(), ViewJobFilter.all(), "jobFilters");
         
-        includeRegex = (req.getParameter("useincluderegex") != null) 
-                ? Util.nullify(req.getParameter("_.includeRegex")) : null;
+        includeRegex = Util.nullify(req.getParameter("_.includeRegex"));
         this.includePattern = (includeRegex != null) 
                 ? Pattern.compile(includeRegex) : null;
          

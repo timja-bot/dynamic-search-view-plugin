@@ -3,8 +3,8 @@
     <st:include page="configure-entries.jelly" class="hudson.model.ListView"/>
 
     <f:section title="${%UI Default Filters Setup}">
-        <f:entry title="${%Regular expression}">
-            <f:textbox name="defaultIncludeRegex" field="defaultIncludeRegex" />
+        <f:entry title="${%Name Pattern}" help="${rootURL}/plugin/dynamic-search-view/help/help-defaultIncludeRegex.html">
+            <f:textbox name="defaultIncludeRegex" field="defaultIncludeRegex"/>               
         </f:entry>
         <j:if test="${it.hasJobFilterExtensions()}">
             <j:invokeStatic var="allJobFilters" className="hudson.views.ViewJobFilter" method="all"/>

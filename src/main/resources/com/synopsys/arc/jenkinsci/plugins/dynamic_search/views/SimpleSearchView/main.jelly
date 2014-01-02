@@ -13,14 +13,11 @@
         <f:form method="post" name="config" action="searchSubmit">
             <f:block>
                 <table>
-                    <f:section title="${%Search options}">     
-                        <f:optionalBlock name="useIncludeRegex" title="${%useIncludeRegex.title}"
-                                 checked="${it.filters.includeRegex != null}" >
-                            <f:entry title="${%Regular expression}" field="includeRegex"   
-                                     help="${rootURL}/plugin/dynamic-search-view/help/help-includeRegex.html">
-                                <f:textbox value="${it.filters.includeRegex}"/>
-                             </f:entry>
-                        </f:optionalBlock>
+                    <f:section title="${%Search Options}">     
+                        <f:entry title="${%includeRegex.title}" field="includeRegex"   
+                                 help="${rootURL}/plugin/dynamic-search-view/help/help-includeRegex.html">
+                            <f:textbox value="${it.filters.includeRegex}"/>
+                        </f:entry>
 
                         <j:if test="${it.hasJobFilterExtensions()}">
                             <j:invokeStatic var="allJobFilters" className="hudson.views.ViewJobFilter" method="all"/>
