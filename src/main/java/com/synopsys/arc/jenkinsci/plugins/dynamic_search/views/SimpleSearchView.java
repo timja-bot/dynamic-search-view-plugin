@@ -232,7 +232,8 @@ public class SimpleSearchView extends ListView {
      */
     enum SearchAction {   
         runSearchButton,
-        resetDefaultsButton;
+        resetDefaultsButton,
+        saveSearch;
         
         static SearchAction fromRequest(StaplerRequest req) throws IOException {
             Map map = req.getParameterMap();
