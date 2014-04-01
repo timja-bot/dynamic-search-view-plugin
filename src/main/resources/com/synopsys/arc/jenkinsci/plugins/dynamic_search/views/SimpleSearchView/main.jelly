@@ -39,7 +39,7 @@
             </f:block>
         </f:form>
     </div>
-     
+    <br/> 
     <st:include page="main.jelly" class="hudson.model.ListView"/>
     <!--HACK: Clean cache--> 
     <j:set var="sessionId" value="${it.cleanCache()}"/>
