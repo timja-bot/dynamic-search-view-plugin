@@ -34,6 +34,7 @@ import hudson.model.ViewDescriptor;
 import hudson.search.Search;
 import hudson.util.DescribableList;
 import hudson.util.FormValidation;
+import hudson.util.VersionNumber;
 import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -42,6 +43,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletException;
+import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.Stapler;
@@ -58,6 +60,12 @@ import org.kohsuke.stapler.StaplerResponse;
  */
 public class SimpleSearchView extends ListView {
 
+    /**
+     * A minimal version, where views can disable the automatic refresh.
+     * @since 0.2.1
+     * TODO: check the version
+     */
+    public static final VersionNumber MINIMAL_AUTOREFRESH_VERSION = new VersionNumber("1.557");
     transient UserContextCache contextMap;
     
     private String defaultIncludeRegex;
@@ -122,19 +130,11 @@ public class SimpleSearchView extends ListView {
     }
     
     /**
-     * An override for future versions.
+     * An override for future versions (since 1.557).
+     * @return Always false
      */
     public boolean isAutomaticRefreshEnabled() {
         return false;
-    }
-       
-    /**
-     * Checks that the auto-refresh is enabled for the page.
-     */
-    public boolean isAutoRefreshActive() {
-        return true;
-        //TODO: implement something cool
-       // Stapler.getCurrentResponse().get
     }
     
     /**
@@ -219,7 +219,17 @@ public class SimpleSearchView extends ListView {
                 }
             }
             return FormValidation.ok();
-        }     
+        }   
+      
+        /**
+         * Checks that the auto-refresh may be enabled for the page.
+         *
+         * @return true if the Jenkins core does not support the autorefresh
+         * disabling.
+         */
+        public boolean isAutoRefreshActive() {
+            return Jenkins.getVersion().isOlderThan(MINIMAL_AUTOREFRESH_VERSION);
+        }
     }
   
     public boolean hasUserJobFilterExtensions() {

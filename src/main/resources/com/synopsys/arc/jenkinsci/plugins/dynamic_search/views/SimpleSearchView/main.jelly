@@ -2,7 +2,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">       
     
     <!--Just a warning message-->
-    <j:if test="${it.autoRefreshActive}">
+    <j:if test="${it.descriptor.autoRefreshActive}">
         <a style="color:red">
             <b>${%Warning}!</b>
         </a> 
@@ -39,7 +39,7 @@
             </f:block>
         </f:form>
     </div>
-     
+    <br/> 
     <st:include page="main.jelly" class="hudson.model.ListView"/>
     <!--HACK: Clean cache--> 
     <j:set var="sessionId" value="${it.cleanCache()}"/>

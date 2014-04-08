@@ -1,6 +1,8 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <div>
         Provides a view with dynamically configurable filters. <br/>
-        <b>Warning!</b> Please note that the view is not robust against page refreshes.
+        <j:if test="${descriptor.autoRefreshActive}">
+            <b style="color:red">Warning!</b> The view is not robust against automatic page refreshes on Jenkins 1.557 or older.
+        </j:if>
     </div>
 </j:jelly>
