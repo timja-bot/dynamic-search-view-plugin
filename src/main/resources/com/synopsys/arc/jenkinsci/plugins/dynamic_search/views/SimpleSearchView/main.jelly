@@ -35,7 +35,7 @@
             <f:block>
                 <f:submit name="runSearchButton" value="${%Search}" />
                 <f:submit name="resetDefaultsButton" value="${%Reset Defaults}" />
-                <f:submit name="saveSearch" value="${%Save Search}" />
+            <!--    <f:submit name="saveSearch" value="${%Save Search}" /> -->
             </f:block>
         </f:form>
     </div>
