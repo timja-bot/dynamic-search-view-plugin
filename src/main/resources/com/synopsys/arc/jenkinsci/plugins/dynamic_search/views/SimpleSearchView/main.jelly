@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">       
     
-    <!--Just a warning message-->
+    <!-- Just a warning message if the automatic refresh is enabled -->
     <j:if test="${it.descriptor.autoRefreshActive}">
         <a style="color:red">
             <b>${%Warning}!</b>
@@ -9,6 +9,7 @@
         ${%autoRefreshWarning}
     </j:if> 
  
+    <!-- Search box -->
     <div style="border:1px solid #999">
         <f:form method="post" name="config" action="searchSubmit">
             <f:block>
@@ -40,7 +41,10 @@
         </f:form>
     </div>
     <br/> 
+    
+    <!-- Display the job list -->
     <st:include page="main.jelly" class="hudson.model.ListView"/>
-    <!--HACK: Clean cache--> 
+    
+    <!--HACK: Clean cache after the request completion--> 
     <j:set var="sessionId" value="${it.cleanCache()}"/>
 </j:jelly>
