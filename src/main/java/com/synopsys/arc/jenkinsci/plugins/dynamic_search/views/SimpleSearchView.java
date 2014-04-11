@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -63,10 +64,9 @@ public class SimpleSearchView extends ListView {
     /**
      * A minimal version, where views can disable the automatic refresh.
      * @since 0.2.1
-     * TODO: check the version
      */
     public static final VersionNumber MINIMAL_AUTOREFRESH_VERSION = new VersionNumber("1.557");
-    transient UserContextCache contextMap;
+    transient final UserContextCache contextMap = new UserContextCache();
     
     private String defaultIncludeRegex;
     private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> defaultJobFilters;
@@ -93,7 +93,7 @@ public class SimpleSearchView extends ListView {
             defaultJobFilters = new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(this);
         }
         defaultJobFilters.rebuildHetero(req, req.getSubmittedForm(), ViewJobFilter.all(), "defaultJobFilters");
-        defaultIncludeRegex = hudson.Util.fixEmpty(req.getParameter("defaultIncludeRegex").toString());
+        defaultIncludeRegex = hudson.Util.fixEmpty(req.getParameter("defaultIncludeRegex"));
     }
          
     /**
@@ -110,23 +110,29 @@ public class SimpleSearchView extends ListView {
     }  
 
     public boolean hasConfiguredFilters() {
-        return contextMap!=null && contextMap.containsKey(getSessionId());
+        return contextMap.containsKey(getSessionId());
     }
     
+    /**
+     * Retrieves view filters for the user.
+     * @return View filters from the session if it is available. 
+     * Otherwise, default filters will be returned.
+     */
     public JobsFilter getFilters() {
-        return hasConfiguredFilters() 
-                ? contextMap.get(getSessionId()).getFiltersConfig()
-                : getDefaultFilters();
+        UserContext context = contextMap.get(getSessionId());
+        return context != null ? context.getFiltersConfig() : getDefaultFilters();
     }
 
     /**
      * Gets default search options for UI. 
+     * @return a default set of filters.
      * @since 0.2
      */
+    @Nonnull
     public JobsFilter getDefaultFilters() {
         return new JobsFilter(this, 
-                    defaultJobFilters.getAll(ViewJobFilter.class), 
-                    defaultIncludeRegex, null);
+               defaultJobFilters.getAll(ViewJobFilter.class), 
+               defaultIncludeRegex, null);
     }
     
     /**
@@ -140,13 +146,11 @@ public class SimpleSearchView extends ListView {
     /**
      * Cleans internal cache of JSON Objects for the session.
      * @todo Cleanup approach, replace for URL-based parameterization
-     * @return sessionId
+     * @return Current Session Id
      */
     public String cleanCache() {
         final String sessionId = getSessionId();
-        if (hasConfiguredFilters()) {
-            contextMap.flush(sessionId);
-        }
+        contextMap.flush(sessionId);
         
         //TODO: garbage collector       
         return sessionId;
@@ -178,6 +182,7 @@ public class SimpleSearchView extends ListView {
                 updateSearchCache(getDefaultFilters());
                 rsp.sendRedirect(".");
                 break;
+            //TODO: Implement "Save As"
             default:
                 throw new IOException("Action "+action+" is not supported");
         } 
@@ -185,11 +190,6 @@ public class SimpleSearchView extends ListView {
     
     public void updateSearchCache(JobsFilter filter) {
         // Put Context to the map
-        if (contextMap==null) {
-            synchronized(this) {
-                contextMap = new UserContextCache();
-            }
-        }
         contextMap.put(getSessionId(), new UserContext(filter));
     }
       
@@ -206,9 +206,6 @@ public class SimpleSearchView extends ListView {
             return doCheckIncludeRegex(value);
         }
         
-        /**
-         * Checks if the include regular expression is valid.
-         */
         public FormValidation doCheckIncludeRegex( @QueryParameter String value ) throws IOException, ServletException, InterruptedException  {
             String v = Util.fixEmpty(value);
             if (v != null) {
@@ -223,8 +220,7 @@ public class SimpleSearchView extends ListView {
       
         /**
          * Checks that the auto-refresh may be enabled for the page.
-         *
-         * @return true if the Jenkins core does not support the autorefresh
+         * @return true if the Jenkins core does not support the auto-refresh
          * disabling.
          */
         public boolean isAutoRefreshActive() {

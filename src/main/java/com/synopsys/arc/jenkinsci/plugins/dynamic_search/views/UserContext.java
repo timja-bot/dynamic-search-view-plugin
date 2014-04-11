@@ -23,6 +23,8 @@
  */
 package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
+import javax.annotation.Nonnull;
+
 /**
  * Stores a context of user selections.
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
@@ -32,10 +34,11 @@ class UserContext {
     
     private final JobsFilter filtersConfig;
     
-    public UserContext(JobsFilter filtersConfig) {
+    public UserContext( @Nonnull JobsFilter filtersConfig) {
         this.filtersConfig = filtersConfig;
     }
 
+    @Nonnull
     public JobsFilter getFiltersConfig() {
         return filtersConfig;
     }

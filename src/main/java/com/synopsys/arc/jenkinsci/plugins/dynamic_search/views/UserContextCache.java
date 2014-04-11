@@ -26,6 +26,7 @@ package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 import static com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSearchView.getSessionId;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.CheckForNull;
 
 /**
  * Stores search sessions for {@link SimpleSearchView}.
@@ -39,6 +40,7 @@ class UserContextCache {
         return contextMap.containsKey(sessionId);
     }
     
+    @CheckForNull
     public UserContext get(String sessionId) {
         return contextMap.get(sessionId);
     }

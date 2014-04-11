@@ -39,6 +39,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -103,7 +105,9 @@ public class JobsFilter {
     }
 
 
-    public List<TopLevelItem> doFilter(List<TopLevelItem> input, View view) {
+    @Nonnull
+    public List<TopLevelItem> doFilter(
+            @Nonnull List<TopLevelItem> input, @Nonnull View view) {
         
         // Dump a names map for projects mathing the regex
         SortedSet<String> names;     
@@ -143,18 +147,22 @@ public class JobsFilter {
         return items;
     }
 
+    @Nonnull
     public DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> getJobFilters() {
         return jobFilters;
     }
 
+    @CheckForNull
     public Pattern getIncludePattern() {
         return includePattern;
     }
 
+    @CheckForNull
     public String getIncludeRegex() {
         return includeRegex;
     }
 
+    @CheckForNull
     public Boolean getStatusFilter() {
         return statusFilter;
     }
