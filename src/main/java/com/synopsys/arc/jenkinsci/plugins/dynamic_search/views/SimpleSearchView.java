@@ -66,7 +66,9 @@ public class SimpleSearchView extends ListView {
      * @since 0.2.1
      */
     public static final VersionNumber MINIMAL_AUTOREFRESH_VERSION = new VersionNumber("1.557");
-    transient final UserContextCache contextMap = new UserContextCache();
+    
+    @Nonnull
+    transient UserContextCache contextMap;
     
     private String defaultIncludeRegex;
     private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> defaultJobFilters;
@@ -74,7 +76,15 @@ public class SimpleSearchView extends ListView {
     @DataBoundConstructor
     public SimpleSearchView(String name) {
         super(name);
+        this.contextMap = new UserContextCache();
     } 
+    
+    protected Object readResolve() {
+        if (contextMap == null) {
+            contextMap = new UserContextCache();
+        }
+        return this;
+    }
 
     public String getDefaultIncludeRegex() {
         return defaultIncludeRegex;
