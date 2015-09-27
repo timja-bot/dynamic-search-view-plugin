@@ -55,15 +55,18 @@ public class JobsFilter {
     /**
      * Jobs filters.
      */
+    @Nonnull
     private final DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> jobFilters;
     /**
      * Include regex string.
      */
+    @CheckForNull
     private final String includeRegex;
     /**
      * Filter by enabled/disabled status of jobs. Null for no filter, true for
      * enabled-only, false for disabled-only.
      */
+    @CheckForNull
     private final Boolean statusFilter;
     /**
      * Compiled include pattern from the includeRegex string.
@@ -73,7 +76,10 @@ public class JobsFilter {
     /**
      * Constructs a filter using specified default values.
      */
-    JobsFilter(View owner, Collection<? extends ViewJobFilter> jobFilters, String includeRegex, Boolean statusFilter) 
+    JobsFilter(
+            @Nonnull View owner, 
+            @CheckForNull Collection<? extends ViewJobFilter> jobFilters, 
+            @CheckForNull String includeRegex, @CheckForNull Boolean statusFilter) 
             throws PatternSyntaxException {
         this.jobFilters = (jobFilters != null)
                 ? new DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>>(owner, jobFilters)
