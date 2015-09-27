@@ -148,9 +148,7 @@ public class SimpleSearchView extends ListView {
      */
     @Nonnull
     public JobsFilter getDefaultFilters() {
-        return new JobsFilter(this, 
-               defaultJobFilters != null ? defaultJobFilters : Collections.<ViewJobFilter>emptyList(), 
-               defaultIncludeRegex, null);
+        return new JobsFilter(this, defaultJobFilters, defaultIncludeRegex, null);
     }
     
     /**
