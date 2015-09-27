@@ -187,7 +187,11 @@ public class SimpleSearchView extends ListView {
     public void doSearchSubmit(StaplerRequest req, StaplerResponse rsp) 
             throws IOException, UnsupportedEncodingException, ServletException, 
             Descriptor.FormException {
-        Hudson.getInstance().checkPermission(View.READ);
+        final Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IOException("Jenkins instance is not ready");
+        }
+        jenkins.checkPermission(View.READ);
         SearchAction action = SearchAction.fromRequest(req);
         
         switch (action) {
