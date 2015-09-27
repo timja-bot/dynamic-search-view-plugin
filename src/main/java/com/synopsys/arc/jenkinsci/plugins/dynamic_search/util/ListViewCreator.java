@@ -24,12 +24,18 @@
 package com.synopsys.arc.jenkinsci.plugins.dynamic_search.util;
 
 import com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSearchView;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 /**
  * Provides methods for creating of new views from {@link SimpleSearchView}. 
- * @author Oleg Nenashev, Synopsys Inc.
+ * @author Oleg Nenashev
  * @since 0.3
+ * @deprecated The functionality is not ready. The class sneaked into the 
+ * code somehow and then got released.
  */
+@Deprecated
+@Restricted(NoExternalUse.class)
 class ListViewCreator {
     public void createMyView() {
         

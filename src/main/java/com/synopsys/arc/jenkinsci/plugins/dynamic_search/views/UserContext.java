@@ -28,8 +28,8 @@ import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 /**
- * Stores a context of user selections.
- * @author Oleg Nenashev, Synopsys Inc.
+ * Stores a context of user selections in {@link SimpleSearchView}.
+ * @author Oleg Nenashev
  * @since 0.2
  */
 @Restricted(NoExternalUse.class)

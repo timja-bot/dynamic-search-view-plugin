@@ -32,7 +32,7 @@ import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 /**
  * Stores search sessions for {@link SimpleSearchView}.
- * @author Oleg Nenashev, Synopsys Inc.
+ * @author Oleg Nenashev
  * @since 0.2
  */
 @Restricted(NoExternalUse.class)

@@ -53,11 +53,13 @@ import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * List View with dynamic filters.
+ * The class is being displayed as a &quot;Dynamic Search View&quot; in Jenkins UI,
+ * but we keep the original class name in order to maintain the backward compatibility.
  * Class uses internal storage to pass parameters between pages.
  * @todo Add support of URLs
  * @todo Add "Save as view" button
  * @fixme Add garbage collector
- * @author Oleg Nenashev, Synopsys Inc.
+ * @author Oleg Nenashev
  */
 public class SimpleSearchView extends ListView {
 

@@ -46,7 +46,7 @@ import org.kohsuke.stapler.StaplerRequest;
 
 /**
  * Implements a job filter for {@link SimpleSearchView}.
- * @author Oleg Nenashev, Synopsys Inc.
+ * @author Oleg Nenashev
  * @see SimpleSearchView
  * @since 0.1
  */
