@@ -36,13 +36,11 @@
         <developer>
             <id>oleg_nenashev</id>
             <name>Oleg Nenashev</name>
-            <email>nenashev@synopsys.com; o.v.nenashev@gmail.com</email>
-            <organizationUrl>http://www.synopsys.com</organizationUrl>
-            <organization>Synopsys Inc.</organization>              			
+            <email>o.v.nenashev@gmail.com</email>            			
             <roles>
                 <role>maintainer</role>
             </roles>
-            <timezone>+4</timezone>
+            <timezone>+3</timezone>
         </developer>
     </developers>
 
