@@ -27,12 +27,15 @@ import static com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSear
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.CheckForNull;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 /**
  * Stores search sessions for {@link SimpleSearchView}.
  * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
  * @since 0.2
  */
+@Restricted(NoExternalUse.class)
 class UserContextCache {
     Map<String, UserContext> contextMap = new HashMap<String, UserContext>();
     
