@@ -36,22 +36,22 @@ import javax.annotation.CheckForNull;
 class UserContextCache {
     Map<String, UserContext> contextMap = new HashMap<String, UserContext>();
     
-    public boolean containsKey(String sessionId) {
+    public synchronized boolean containsKey(String sessionId) {
         return contextMap.containsKey(sessionId);
     }
     
     @CheckForNull
-    public UserContext get(String sessionId) {
+    public synchronized UserContext get(String sessionId) {
         return contextMap.get(sessionId);
     }
     
-    public void flush(String sessionId) {
+    public synchronized void flush(String sessionId) {
         if (contextMap.containsKey(sessionId)) {
             contextMap.remove(sessionId);
         }      
     }
     
-    public void put (String sessionId, UserContext context) {
+    public synchronized void put (String sessionId, UserContext context) {
         contextMap.put(getSessionId(), context);
     } 
 }
