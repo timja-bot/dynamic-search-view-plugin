@@ -50,7 +50,7 @@ public class SimpleSearchViewTest {
         
         // Create view taking all jobs
         SimpleSearchView view = new SimpleSearchView("testView");
-        view.setIncludeRegex(".*");
+        view.setDefaultIncludeRegex(".*");
         j.jenkins.addView(view);
        
         // Perform a request

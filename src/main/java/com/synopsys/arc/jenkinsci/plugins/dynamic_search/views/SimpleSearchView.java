@@ -47,6 +47,8 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import jenkins.model.Jenkins;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.Stapler;
@@ -148,7 +150,8 @@ public class SimpleSearchView extends ListView {
      */
     @Nonnull
     public JobsFilter getDefaultFilters() {
-        return new JobsFilter(this, defaultJobFilters, defaultIncludeRegex, null);
+        return new JobsFilter(this, defaultJobFilters != null ? defaultJobFilters.toList() : null, 
+                defaultIncludeRegex, null);
     }
     
     /**
@@ -157,6 +160,11 @@ public class SimpleSearchView extends ListView {
      */
     public boolean isAutomaticRefreshEnabled() {
         return false;
+    }
+    
+    @Restricted(NoExternalUse.class)
+    public void setDefaultIncludeRegex(String regex) {
+        this.defaultIncludeRegex = regex;
     }
     
     /**
