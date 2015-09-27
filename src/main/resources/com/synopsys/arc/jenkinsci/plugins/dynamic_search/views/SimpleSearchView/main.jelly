@@ -43,7 +43,7 @@
     <br/> 
     
     <!-- Display the job list -->
-    <st:include page="main.jelly" class="hudson.model.ListView"/>
+    <st:include page="itemsTable.jelly"/>
     
     <!--HACK: Clean cache after the request completion--> 
     <j:set var="sessionId" value="${it.cleanCache()}"/>

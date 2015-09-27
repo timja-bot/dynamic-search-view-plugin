@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014-2015 Oleg Nenashev, Synopsys Inc.
+ * Copyright (c) 2015 Oleg Nenashev.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.synopsys.arc.jenkinsci.plugins.dynamic_search.util;
+package org.jenkinsci.plugins.dynamicsearchview;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSearchView;
-import org.kohsuke.accmod.Restricted;
-import org.kohsuke.accmod.restrictions.NoExternalUse;
+import hudson.model.FreeStyleProject;
+import org.junit.Rule;
+import org.junit.Test;
+import org.jvnet.hudson.test.Bug;
+import org.jvnet.hudson.test.JenkinsRule;
 
 /**
- * Provides methods for creating of new views from {@link SimpleSearchView}. 
+ * Tests of {@link SimpleSearchView}.
  * @author Oleg Nenashev
- * @since 0.3
- * @deprecated The functionality is not ready. The class sneaked into the 
- * code somehow and then got released.
  */
-@Deprecated
-@Restricted(NoExternalUse.class)
-class ListViewCreator {
-    public void createMyView() {
+public class SimpleSearchViewTest {
+    
+    @Rule
+    public JenkinsRule j = new JenkinsRule();
+    
+    //TODO: Change @Bug to @Issue after Jenkins core upgrade
+    @Test
+    @Bug(30663)
+    public void spotCheck() throws Exception {
+        // Create two sample projects
+        FreeStyleProject projectA = j.createFreeStyleProject("a");
+        FreeStyleProject projectB = j.createFreeStyleProject("b");
         
+        // Create view taking all jobs
+        SimpleSearchView view = new SimpleSearchView("testView");
+        view.setDefaultIncludeRegex(".*");
+        j.jenkins.addView(view);
+       
+        // Perform a request
+        JenkinsRule.WebClient webClient = j.createWebClient(); 
+        HtmlPage res = webClient.goTo(view.getUrl());
+        
+        // Reload jenkins config and send the request again
+        j.jenkins.reload();
+        res = webClient.goTo(view.getUrl());
     }
 }

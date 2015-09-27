@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013 Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
+ * Copyright 2013-2015 Oleg Nenashev, Synopsys Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,15 @@
 package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
 import javax.annotation.Nonnull;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 /**
- * Stores a context of user selections.
- * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
+ * Stores a context of user selections in {@link SimpleSearchView}.
+ * @author Oleg Nenashev
  * @since 0.2
  */
+@Restricted(NoExternalUse.class)
 class UserContext {
     
     private final JobsFilter filtersConfig;

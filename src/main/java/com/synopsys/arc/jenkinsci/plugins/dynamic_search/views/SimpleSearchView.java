@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013 Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
+ * Copyright 2013-2015 Oleg Nenashev, Synopsys Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,13 +38,17 @@ import hudson.util.VersionNumber;
 import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import jenkins.model.Jenkins;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.Stapler;
@@ -53,11 +57,13 @@ import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * List View with dynamic filters.
+ * The class is being displayed as a &quot;Dynamic Search View&quot; in Jenkins UI,
+ * but we keep the original class name in order to maintain the backward compatibility.
  * Class uses internal storage to pass parameters between pages.
  * @todo Add support of URLs
  * @todo Add "Save as view" button
  * @fixme Add garbage collector
- * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
+ * @author Oleg Nenashev
  */
 public class SimpleSearchView extends ListView {
 
@@ -66,20 +72,34 @@ public class SimpleSearchView extends ListView {
      * @since 0.2.1
      */
     public static final VersionNumber MINIMAL_AUTOREFRESH_VERSION = new VersionNumber("1.557");
-    transient final UserContextCache contextMap = new UserContextCache();
     
+    @Nonnull
+    transient UserContextCache contextMap;
+    
+    @CheckForNull
     private String defaultIncludeRegex;
+    @CheckForNull
     private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> defaultJobFilters;
 
     @DataBoundConstructor
     public SimpleSearchView(String name) {
         super(name);
+        this.contextMap = new UserContextCache();
     } 
+    
+    protected Object readResolve() {
+        if (contextMap == null) {
+            contextMap = new UserContextCache();
+        }
+        return this;
+    }
 
+    @CheckForNull
     public String getDefaultIncludeRegex() {
         return defaultIncludeRegex;
     }
 
+    @CheckForNull
     public DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> getDefaultJobFilters() {
         return defaultJobFilters;
     }
@@ -130,9 +150,8 @@ public class SimpleSearchView extends ListView {
      */
     @Nonnull
     public JobsFilter getDefaultFilters() {
-        return new JobsFilter(this, 
-               defaultJobFilters.getAll(ViewJobFilter.class), 
-               defaultIncludeRegex, null);
+        return new JobsFilter(this, defaultJobFilters != null ? defaultJobFilters.toList() : null, 
+                defaultIncludeRegex, null);
     }
     
     /**
@@ -141,6 +160,11 @@ public class SimpleSearchView extends ListView {
      */
     public boolean isAutomaticRefreshEnabled() {
         return false;
+    }
+    
+    @Restricted(NoExternalUse.class)
+    public void setDefaultIncludeRegex(String regex) {
+        this.defaultIncludeRegex = regex;
     }
     
     /**
@@ -169,7 +193,11 @@ public class SimpleSearchView extends ListView {
     public void doSearchSubmit(StaplerRequest req, StaplerResponse rsp) 
             throws IOException, UnsupportedEncodingException, ServletException, 
             Descriptor.FormException {
-        Hudson.getInstance().checkPermission(View.READ);
+        final Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IOException("Jenkins instance is not ready");
+        }
+        jenkins.checkPermission(View.READ);
         SearchAction action = SearchAction.fromRequest(req);
         
         switch (action) {

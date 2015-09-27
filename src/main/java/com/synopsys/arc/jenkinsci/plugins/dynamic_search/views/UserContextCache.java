@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013 Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
+ * Copyright 2013-2015 Oleg Nenashev, Synopsys Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,31 +27,34 @@ import static com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSear
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.CheckForNull;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 /**
  * Stores search sessions for {@link SimpleSearchView}.
- * @author Oleg Nenashev <nenashev@synopsys.com>, Synopsys Inc.
+ * @author Oleg Nenashev
  * @since 0.2
  */
+@Restricted(NoExternalUse.class)
 class UserContextCache {
     Map<String, UserContext> contextMap = new HashMap<String, UserContext>();
     
-    public boolean containsKey(String sessionId) {
+    public synchronized boolean containsKey(String sessionId) {
         return contextMap.containsKey(sessionId);
     }
     
     @CheckForNull
-    public UserContext get(String sessionId) {
+    public synchronized UserContext get(String sessionId) {
         return contextMap.get(sessionId);
     }
     
-    public void flush(String sessionId) {
+    public synchronized void flush(String sessionId) {
         if (contextMap.containsKey(sessionId)) {
             contextMap.remove(sessionId);
         }      
     }
     
-    public void put (String sessionId, UserContext context) {
+    public synchronized void put (String sessionId, UserContext context) {
         contextMap.put(getSessionId(), context);
     } 
 }
