@@ -38,10 +38,12 @@ import hudson.util.VersionNumber;
 import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import jenkins.model.Jenkins;
@@ -72,7 +74,9 @@ public class SimpleSearchView extends ListView {
     @Nonnull
     transient UserContextCache contextMap;
     
+    @CheckForNull
     private String defaultIncludeRegex;
+    @CheckForNull
     private DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> defaultJobFilters;
 
     @DataBoundConstructor
@@ -88,10 +92,12 @@ public class SimpleSearchView extends ListView {
         return this;
     }
 
+    @CheckForNull
     public String getDefaultIncludeRegex() {
         return defaultIncludeRegex;
     }
 
+    @CheckForNull
     public DescribableList<ViewJobFilter, Descriptor<ViewJobFilter>> getDefaultJobFilters() {
         return defaultJobFilters;
     }
@@ -143,7 +149,7 @@ public class SimpleSearchView extends ListView {
     @Nonnull
     public JobsFilter getDefaultFilters() {
         return new JobsFilter(this, 
-               defaultJobFilters.getAll(ViewJobFilter.class), 
+               defaultJobFilters != null ? defaultJobFilters : Collections.<ViewJobFilter>emptyList(), 
                defaultIncludeRegex, null);
     }
     

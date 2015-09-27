@@ -28,6 +28,7 @@ import com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSearchView;
 import hudson.model.FreeStyleProject;
 import org.junit.Rule;
 import org.junit.Test;
+import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.JenkinsRule;
 
 /**
@@ -39,7 +40,9 @@ public class SimpleSearchViewTest {
     @Rule
     public JenkinsRule j = new JenkinsRule();
     
+    //TODO: Change @Bug to @Issue after Jenkins core upgrade
     @Test
+    @Bug(30663)
     public void spotCheck() throws Exception {
         // Create two sample projects
         FreeStyleProject projectA = j.createFreeStyleProject("a");
