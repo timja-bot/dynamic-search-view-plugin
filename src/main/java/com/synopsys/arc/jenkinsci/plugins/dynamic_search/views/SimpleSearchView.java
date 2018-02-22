@@ -23,10 +23,11 @@
  */
 package com.synopsys.arc.jenkinsci.plugins.dynamic_search.views;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
+import hudson.RestrictedSince;
 import hudson.Util;
 import hudson.model.Descriptor;
-import hudson.model.Hudson;
 import hudson.model.ListView;
 import hudson.model.TopLevelItem;
 import hudson.model.View;
@@ -38,7 +39,6 @@ import hudson.util.VersionNumber;
 import hudson.views.ViewJobFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -55,14 +55,15 @@ import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
+// TODO: Add support of URLs
+// TODO: Add "Save as view" button
+// TODO: Add garbage collector
+
 /**
  * List View with dynamic filters.
  * The class is being displayed as a &quot;Dynamic Search View&quot; in Jenkins UI,
  * but we keep the original class name in order to maintain the backward compatibility.
  * Class uses internal storage to pass parameters between pages.
- * @todo Add support of URLs
- * @todo Add "Save as view" button
- * @fixme Add garbage collector
  * @author Oleg Nenashev
  */
 public class SimpleSearchView extends ListView {
@@ -86,7 +87,8 @@ public class SimpleSearchView extends ListView {
         super(name);
         this.contextMap = new UserContextCache();
     } 
-    
+
+    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "recovers the transient field")
     protected Object readResolve() {
         if (contextMap == null) {
             contextMap = new UserContextCache();
@@ -166,10 +168,10 @@ public class SimpleSearchView extends ListView {
     public void setDefaultIncludeRegex(String regex) {
         this.defaultIncludeRegex = regex;
     }
-    
+
+    //TODO: Cleanup approach, replace for URL-based parameterization
     /**
      * Cleans internal cache of JSON Objects for the session.
-     * @todo Cleanup approach, replace for URL-based parameterization
      * @return Current Session Id
      */
     public String cleanCache() {
@@ -189,7 +191,9 @@ public class SimpleSearchView extends ListView {
         JobsFilter filters = getFilters();
         return filters.doFilter(res, this);
     }
-       
+
+    @Restricted(NoExternalUse.class)
+    @RestrictedSince("0.3.0")
     public void doSearchSubmit(StaplerRequest req, StaplerResponse rsp) 
             throws IOException, UnsupportedEncodingException, ServletException, 
             Descriptor.FormException {
@@ -233,7 +237,9 @@ public class SimpleSearchView extends ListView {
                 throws IOException, ServletException, InterruptedException  {
             return doCheckIncludeRegex(value);
         }
-        
+
+        @Restricted(NoExternalUse.class)
+        @RestrictedSince("0.3.0")
         public FormValidation doCheckIncludeRegex( @QueryParameter String value ) throws IOException, ServletException, InterruptedException  {
             String v = Util.fixEmpty(value);
             if (v != null) {
