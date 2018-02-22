@@ -258,7 +258,11 @@ public class SimpleSearchView extends ListView {
          * disabling.
          */
         public boolean isAutoRefreshActive() {
-            return Jenkins.getVersion().isOlderThan(MINIMAL_AUTOREFRESH_VERSION);
+            VersionNumber version = Jenkins.getVersion();
+            if (version == null) {
+                return false; // It is about to be removed in 2.1xx at all, https://github.com/jenkinsci/jenkins/pull/2979
+            }
+            return version.isOlderThan(MINIMAL_AUTOREFRESH_VERSION);
         }
     }
   
