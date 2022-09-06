@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>3.5</version>
+        <version>4.47</version>
     </parent>
 
     <groupId>com.synopsys.arc.jenkinsci</groupId>
@@ -16,8 +16,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jenkins.version>1.625.3</jenkins.version>
-        <java.level>7</java.level>
+        <java.level>11</java.level>
     </properties>
 
     <repositories>
@@ -38,9 +37,17 @@
         <developer>
             <id>oleg_nenashev</id>
             <name>Oleg Nenashev</name>
-            <email>o.v.nenashev@gmail.com</email>            			
+            <email>o.v.nenashev@gmail.com</email>
             <roles>
                 <role>maintainer (retired)</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>kmartens27</id>
+            <name>Kevin Martens</name>
+            <email>kmartens@cloudbees.com</email>
+            <roles>
+                <role>maintainer</role>
             </roles>
         </developer>
     </developers>
@@ -51,15 +58,15 @@
         <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
       <tag>HEAD</tag>
   </scm>
-    
+
     <licenses>
         <license>
             <name>MIT License</name>
             <url>http://www.opensource.org/licenses/mit-license.php</url>
             <distribution>repo</distribution>
         </license>
-    </licenses>	
-    
+    </licenses>
+
     <!-- TODO: Uncomment after appropriate extension
     <dependencies>
         <dependency>
