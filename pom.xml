@@ -17,6 +17,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.level>11</java.level>
+        <spotbugs.effort>Max</spotbugs.effort>
+        <spotbugs.failOnError>true</spotbugs.failOnError>
+        <spotbugs.threshold>Low</spotbugs.threshold>
     </properties>
 
     <repositories>
