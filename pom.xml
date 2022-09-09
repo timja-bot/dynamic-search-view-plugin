@@ -6,13 +6,15 @@
         <version>4.47</version>
     </parent>
 
+
+
     <groupId>com.synopsys.arc.jenkinsci</groupId>
     <artifactId>dynamic-search-view</artifactId>
     <version>${revision}${changelist}</version>
     <name>Dynamic Search View Plugin</name>
     <description>Provides a view with dynamically configurable filters</description>
     <packaging>hpi</packaging>
-    <url>https://wiki.jenkins.io/display/JENKINS/Dynamic+Search+View+Plugin</url>
+    <url>https://github.com/jenkinsci/dynamic-search-view-plugin</url>
 
     <properties>
         <revision>0.3.1</revision>
