@@ -8,13 +8,16 @@
 
     <groupId>com.synopsys.arc.jenkinsci</groupId>
     <artifactId>dynamic-search-view</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
     <name>Dynamic Search View Plugin</name>
     <description>Provides a view with dynamically configurable filters</description>
     <packaging>hpi</packaging>
     <url>https://wiki.jenkins.io/display/JENKINS/Dynamic+Search+View+Plugin</url>
 
     <properties>
+        <revision>0.3.1</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <gitHubRepo>jenkinsci/dynamic-search-view-plugin</gitHubRepo>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.level>11</java.level>
         <spotbugs.effort>Max</spotbugs.effort>
@@ -56,10 +59,10 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-        <developerConnection>scm:git:https://git@github.com/jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-        <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-      <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
+        <developerConnection>scm:git:https://git@github.com/${gitHubRepo}.git</developerConnection>
+        <url>https://github.com/${gitHubRepo}</url>
+      <tag>${scmTag}</tag>
   </scm>
 
     <licenses>
