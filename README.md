@@ -15,12 +15,12 @@ As always, contributions are appreciated by anyone!
 
 1.  Create a new **Dynamic Search View**.
 2.  Configure the main filters for the view.
-  a. You can setup implicit filters and columns.
-  b. The plugin also supports standard `JobFilter` and `ListViewColumn` extensions.
-  c. If you want to filter all jobs, set a regexp filter with the `.\*` mask
+    a. You can setup implicit filters and columns. 
+    b. The plugin also supports standard `JobFilter` and `ListViewColumn` extensions.
+    c. If you want to filter all jobs, set a regexp filter with the `.\*` mask
 3.  Select your new view.
-  a.  You can set additional filters on the main view page.
-  b.  Select **Submit** to apply the additional filters.
+    a.  You can set additional filters on the main view page.
+    b.  Select **Submit** to apply the additional filters.
 
 The updated View creation page:
 
