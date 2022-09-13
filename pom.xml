@@ -14,6 +14,7 @@
     <name>Dynamic Search View Plugin</name>
     <description>Provides a view with dynamically configurable filters</description>
     <packaging>hpi</packaging>
+
     <url>https://github.com/jenkinsci/dynamic-search-view-plugin</url>
 
     <properties>
