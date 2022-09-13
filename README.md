@@ -29,3 +29,8 @@ The updated View creation page:
 View with additional filters:
 
 ![](docs/images/MainPage.png)
+
+## Report an Issue
+
+Please report issues and enhancements through the
+[Jenkins issue tracker](https://www.jenkins.io/participate/report-issue/redirect/#17668).
