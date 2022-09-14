@@ -21,8 +21,7 @@
         <revision>0.3.1</revision>
         <changelist>-SNAPSHOT</changelist>
         <gitHubRepo>jenkinsci/dynamic-search-view-plugin</gitHubRepo>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.level>11</java.level>
+        <jenkins.version>2.346.3</jenkins.version>
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.failOnError>true</spotbugs.failOnError>
         <spotbugs.threshold>Low</spotbugs.threshold>

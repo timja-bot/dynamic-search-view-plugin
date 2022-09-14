@@ -8,7 +8,6 @@ This allows users to filter and search for jobs in one central view.
 **WARNING** 
 
 The current version of the plugin is a proof of concept and has several significant issues, which are listed here. 
-They will be fixed in future versions.
 As always, contributions are appreciated by anyone!
 
 # Usage
