@@ -23,7 +23,7 @@
  */
 package org.jenkinsci.plugins.dynamicsearchview;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.htmlunit.html.HtmlPage;
 import com.synopsys.arc.jenkinsci.plugins.dynamic_search.views.SimpleSearchView;
 import hudson.model.FreeStyleProject;
 import org.junit.Rule;
